@@ -1,0 +1,363 @@
+
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Priya & Rahul | Royal Wedding Invitation</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Tone.js for Synthesized Royal Indian Sitar/Tanpura Ambience (No External Audio URLs needed) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+    
+    <!-- Font Awesome for Elegant Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts: Cinzel Decorative, Playfair Display, Great Vibes, and Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Tailwind Custom Configuration -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        royalRed: '#5C0011',
+                        deepCrimson: '#3B000B',
+                        royalMaroon: '#7A0019',
+                        royalGold: '#D4AF37',
+                        lightGold: '#F3E5AB',
+                        antiqueGold: '#AA771C',
+                        ivoryCream: '#FFFDF7',
+                        warmSand: '#F9F1E1',
+                    },
+                    fontFamily: {
+                        cinzel: ['"Cinzel Decorative"', 'serif'],
+                        playfair: ['"Playfair Display"', 'serif'],
+                        script: ['"Great Vibes"', 'cursive'],
+                        sans: ['"Poppins"', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Custom Styles for 3D Envelope, Gold Foil Gradients, and Keyframe Animations -->
+    <style>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #3B000B;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #AA771C, #D4AF37, #AA771C);
+            border-radius: 9999px;
+        }
+
+        /* Royal Gold Foil Text Effect */
+        .gold-foil-text {
+            background: linear-gradient(
+                to right,
+                #BF953F 0%,
+                #FCF6BA 25%,
+                #B38728 50%,
+                #FBF5B7 75%,
+                #AA771C 100%
+            );
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-size: 200% auto;
+            animation: shine 4s linear infinite;
+        }
+
+        @keyframes shine {
+            to {
+                background-position: 200% center;
+            }
+        }
+
+        /* Mandala Slow Rotation */
+        @keyframes spinSlow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .animate-mandala {
+            animation: spinSlow 45s linear infinite;
+        }
+        .animate-mandala-reverse {
+            animation: spinSlow 60s linear infinite reverse;
+        }
+
+        /* 3D Envelope Styles */
+        .envelope-wrapper {
+            perspective: 1500px;
+        }
+        .envelope-flap {
+            transform-origin: top center;
+            transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1), z-index 0.4s ease;
+            transform-style: preserve-3d;
+        }
+        .envelope-open .envelope-flap {
+            transform: rotateX(180deg);
+            z-index: 5;
+        }
+        .envelope-card {
+            transition: transform 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) 0.5s;
+        }
+        .envelope-open .envelope-card {
+            transform: translateY(-110px) scale(1.03);
+        }
+        .wax-seal {
+            transition: transform 0.6s ease, opacity 0.5s ease;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.6), inset 0 2px 5px rgba(255,255,255,0.4);
+        }
+        .envelope-open .wax-seal {
+            transform: scale(1.4);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* Ornamental Royal Card Border */
+        .royal-card {
+            background: linear-gradient(145deg, rgba(92, 0, 17, 0.92), rgba(59, 0, 11, 0.96));
+            border: 1px solid rgba(212, 175, 55, 0.45);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(212, 175, 55, 0.12);
+            transition: transform 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease;
+        }
+        .royal-card:hover {
+            transform: translateY(-6px);
+            border-color: rgba(243, 229, 171, 0.85);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.65), inset 0 0 25px rgba(212, 175, 55, 0.22);
+        }
+
+        /* Scroll Reveal Utility */
+        .reveal {
+            opacity: 0;
+            transform: translateY(35px);
+            transition: all 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Pulse Glow for Wax Seal & Music Button */
+        @keyframes pulseGold {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.6); }
+            50% { box-shadow: 0 0 0 14px rgba(212, 175, 55, 0); }
+        }
+        .pulse-gold {
+            animation: pulseGold 2.5s infinite;
+        }
+    </style>
+</head>
+<body class="bg-deepCrimson text-ivoryCream font-sans antialiased overflow-x-hidden selection:bg-royalGold selection:text-deepCrimson">
+
+    <!-- Floating Flower Petals & Golden Particles Canvas (Always active in background) -->
+    <canvas id="petalsCanvas" class="fixed inset-0 pointer-events-none z-40 w-full h-full"></canvas>
+
+    <!-- Custom Toast Notification Box (Replaces alert()) -->
+    <div id="toastBox" class="fixed top-6 left-1/2 -translate-x-1/2 z-[100] hidden items-center gap-3 bg-deepCrimson/95 border border-royalGold text-lightGold px-6 py-3 rounded-full shadow-2xl backdrop-blur-md transition-all duration-300">
+        <i class="fa-solid fa-sparkles text-royalGold"></i>
+        <span id="toastMessage" class="text-sm font-medium tracking-wide">Notification</span>
+    </div>
+
+    <!-- ===================================================================== -->
+    <!-- SECTION 1: ANIMATED OPENING ENVELOPE SCREEN                           -->
+    <!-- ===================================================================== -->
+    <section id="envelopeOverlay" class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-gradient-to-b from-deepCrimson via-royalRed to-deepCrimson px-4 transition-all duration-1000">
+        
+        <!-- Subtle Rotating Background Mandala -->
+        <div class="absolute inset-0 flex items-center justify-center opacity-15 pointer-events-none overflow-hidden">
+            <svg class="w-[650px] h-[650px] sm:w-[850px] sm:h-[850px] animate-mandala text-royalGold" viewBox="0 0 200 200" fill="none" stroke="currentColor">
+                <circle cx="100" cy="100" r="95" stroke-width="0.6" stroke-dasharray="3 3"/>
+                <circle cx="100" cy="100" r="80" stroke-width="1"/>
+                <circle cx="100" cy="100" r="65" stroke-width="0.5"/>
+                <circle cx="100" cy="100" r="45" stroke-width="1"/>
+                <g stroke-width="0.6">
+                    <path d="M100 5 L112 45 L100 85 L88 45 Z"/>
+                    <path d="M100 195 L112 155 L100 115 L88 155 Z"/>
+                    <path d="M5 100 L45 88 L85 100 L45 112 Z"/>
+                    <path d="M195 100 L155 88 L115 100 L155 112 Z"/>
+                    <path d="M32 32 L68 52 L88 88 L52 68 Z"/>
+                    <path d="M168 168 L132 148 L112 112 L148 132 Z"/>
+                    <path d="M168 32 L148 68 L112 88 L132 52 Z"/>
+                    <path d="M32 168 L52 132 L88 112 L68 148 Z"/>
+                </g>
+            </svg>
+        </div>
+
+        <!-- Top Auspicious Header -->
+        <div class="text-center mb-8 z-10">
+            <p class="text-royalGold text-xs sm:text-sm tracking-[0.35em] uppercase mb-2 font-medium">|| Shree Ganeshaya Namah ||</p>
+            <h2 class="font-cinzel text-lightGold text-lg sm:text-2xl tracking-widest">A Royal Wedding Invitation</h2>
+        </div>
+
+        <!-- 3D Envelope Container -->
+        <div id="envelopeContainer" class="envelope-wrapper relative w-full max-w-[360px] sm:max-w-[460px] h-[250px] sm:h-[300px] z-20 cursor-pointer" onclick="openWeddingEnvelope()">
+            
+            <!-- Envelope Back Base -->
+            <div class="absolute inset-0 bg-gradient-to-br from-[#47000D] to-[#290007] rounded-2xl border-2 border-royalGold/60 shadow-[0_25px_60px_rgba(0,0,0,0.85)]"></div>
+
+            <!-- Inner Invitation Card Preview (Slides Up when opened) -->
+            <div class="envelope-card absolute inset-x-4 top-4 bottom-4 bg-ivoryCream rounded-xl p-5 text-center flex flex-col items-center justify-center border-2 border-royalGold shadow-xl z-10">
+                <span class="text-[10px] uppercase tracking-[0.25em] text-antiqueGold font-semibold">Save The Date</span>
+                <h3 class="font-script text-4xl sm:text-5xl text-royalRed my-1">Priya &amp; Rahul</h3>
+                <p class="font-playfair text-xs sm:text-sm text-deepCrimson font-semibold">15 February 2027</p>
+                <p class="text-[11px] text-gray-600 mt-1">Grand Wedding Palace</p>
+            </div>
+
+            <!-- Envelope Left & Right Folds (SVG Pocket) -->
+            <svg class="absolute inset-0 w-full h-full z-20 pointer-events-none rounded-2xl overflow-hidden" viewBox="0 0 460 300" preserveAspectRatio="none">
+                <!-- Left Flap -->
+                <polygon points="0,0 235,165 0,300" fill="#630012" stroke="#D4AF37" stroke-width="1.5"/>
+                <!-- Right Flap -->
+                <polygon points="460,0 225,165 460,300" fill="#590010" stroke="#D4AF37" stroke-width="1.5"/>
+                <!-- Bottom Flap -->
+                <polygon points="0,300 230,145 460,300" fill="#700015" stroke="#D4AF37" stroke-width="2"/>
+            </svg>
+
+            <!-- Envelope Top Flap (Rotates Open in 3D) -->
+            <div class="envelope-flap absolute inset-x-0 top-0 h-[175px] z-30 pointer-events-none">
+                <svg class="w-full h-full drop-shadow-xl" viewBox="0 0 460 175" preserveAspectRatio="none">
+                    <polygon points="0,0 460,0 230,170" fill="#7D0018" stroke="#D4AF37" stroke-width="2.5"/>
+                    <!-- Decorative Inner Gold Border on Flap -->
+                    <polygon points="18,8 442,8 230,156" fill="none" stroke="#F3E5AB" stroke-width="0.8" stroke-dasharray="4 3"/>
+                </svg>
+            </div>
+
+            <!-- Royal Gold Wax Seal & Open Invitation CTA -->
+            <div class="wax-seal absolute left-1/2 top-[155px] -translate-x-1/2 -translate-y-1/2 z-40 flex flex-col items-center">
+                <button type="button" aria-label="Open Invitation" class="pulse-gold w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gradient-to-br from-[#F3E5AB] via-[#D4AF37] to-[#8A5A00] border-4 border-[#FFFDF7]/80 flex flex-col items-center justify-center text-deepCrimson shadow-2xl hover:scale-105 transition-transform">
+                    <span class="font-cinzel font-black text-lg sm:text-xl leading-none tracking-tighter">P&amp;R</span>
+                    <span class="text-[8px] sm:text-[9px] font-bold uppercase tracking-widest mt-1">Open</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Bottom Prompt Button -->
+        <div class="mt-10 z-20 text-center">
+            <button onclick="openWeddingEnvelope()" class="px-8 py-3.5 rounded-full bg-gradient-to-r from-antiqueGold via-royalGold to-antiqueGold text-deepCrimson font-cinzel font-bold text-sm sm:text-base tracking-wider shadow-[0_10px_30px_rgba(212,175,55,0.4)] hover:brightness-110 active:scale-95 transition-all flex items-center gap-2 mx-auto">
+                <i class="fa-solid fa-envelope-open-text"></i>
+                <span>Open Invitation</span>
+            </button>
+            <p class="text-lightGold/70 text-xs mt-3 tracking-wider">Tap the royal seal or button to unseal</p>
+        </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- FLOATING QUICK CONTROLS (MUSIC & WHATSAPP SHARE)                      -->
+    <!-- ===================================================================== -->
+    <div class="fixed bottom-5 right-5 z-40 flex flex-col gap-3">
+        <!-- WhatsApp Share Quick Button -->
+        <button onclick="shareOnWhatsApp()" title="Share Invitation on WhatsApp" class="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[#25D366] text-white shadow-xl border-2 border-white/60 flex items-center justify-center hover:scale-110 active:scale-95 transition-transform">
+            <i class="fa-brands fa-whatsapp text-2xl sm:text-3xl"></i>
+        </button>
+
+        <!-- Background Music Play/Pause Button -->
+        <button id="musicToggleBtn" onclick="toggleBackgroundMusic()" title="Play/Pause Royal Shehnai & Sitar Ambience" class="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-gradient-to-br from-royalGold to-antiqueGold text-deepCrimson shadow-xl border-2 border-lightGold flex items-center justify-center hover:scale-110 active:scale-95 transition-transform">
+            <i id="musicIcon" class="fa-solid fa-volume-xmark text-xl"></i>
+        </button>
+    </div>
+
+    <!-- ===================================================================== -->
+    <!-- MAIN INVITATION CONTENT (REVEALED AFTER OPENING ENVELOPE)             -->
+    <!-- ===================================================================== -->
+    <main id="mainInvitation" class="relative z-10 opacity-0 transition-opacity duration-1000">
+
+        <!-- Top Sticky Navigation Bar -->
+        <nav class="sticky top-0 z-30 bg-deepCrimson/85 backdrop-blur-md border-b border-royalGold/30 px-4 py-3">
+            <div class="max-w-6xl mx-auto flex items-center justify-between">
+                <a href="#welcome" class="font-cinzel font-bold text-lg sm:text-xl gold-foil-text tracking-wider">P &amp; R</a>
+                <div class="hidden md:flex items-center gap-7 text-xs uppercase tracking-[0.2em] text-lightGold/90">
+                    <a href="#welcome" class="hover:text-royalGold transition-colors">Welcome</a>
+                    <a href="#couple" class="hover:text-royalGold transition-colors">Couple</a>
+                    <a href="#events" class="hover:text-royalGold transition-colors">Ceremonies</a>
+                    <a href="#gallery" class="hover:text-royalGold transition-colors">Gallery</a>
+                    <a href="#venue" class="hover:text-royalGold transition-colors">Venue</a>
+                </div>
+                <button onclick="openMapsLocation()" class="text-xs px-4 py-2 rounded-full border border-royalGold text-lightGold hover:bg-royalGold hover:text-deepCrimson transition-all font-medium">
+                    <i class="fa-solid fa-location-dot mr-1"></i> Venue Map
+                </button>
+            </div>
+        </nav>
+
+        <!-- ================================================================= -->
+        <!-- SECTION 2 & 3: WELCOME SCREEN & BRIDE AND GROOM NAMES             -->
+        <!-- ================================================================= -->
+        <section id="welcome" class="relative min-h-screen flex flex-col items-center justify-center text-center px-4 py-20 overflow-hidden">
+            
+            <!-- Ornate Top Floral Arch SVG -->
+            <div class="w-full max-w-2xl mx-auto mb-6 opacity-90">
+                <svg viewBox="0 0 600 90" class="w-full h-auto text-royalGold" fill="none">
+                    <path d="M20,80 Q150,10 300,45 Q450,10 580,80" stroke="currentColor" stroke-width="2" fill="none"/>
+                    <path d="M60,82 Q180,25 300,55 Q420,25 540,82" stroke="#F3E5AB" stroke-width="1" stroke-dasharray="4 4" fill="none"/>
+                    <!-- Hanging Marigold Bells -->
+                    <circle cx="300" cy="45" r="7" fill="#D4AF37"/>
+                    <circle cx="300" cy="62" r="5" fill="#FF9933"/>
+                    <circle cx="300" cy="75" r="4" fill="#D4AF37"/>
+                    <circle cx="180" cy="36" r="5" fill="#FF9933"/>
+                    <circle cx="180" cy="50" r="4" fill="#D4AF37"/>
+                    <circle cx="420" cy="36" r="5" fill="#FF9933"/>
+                    <circle cx="420" cy="50" r="4" fill="#D4AF37"/>
+                </svg>
+            </div>
+
+            <!-- Sanskrit Blessing -->
+            <div class="reveal active max-w-3xl mx-auto">
+                <p class="text-royalGold font-playfair italic text-base sm:text-lg mb-2">
+                    "वक्रतुण्ड महाकाय सूर्यकोटि समप्रभ। निर्विघ्नं कुरु मे देव सर्वकार्येषु सर्वदा॥"
+                </p>
+                <p class="text-xs sm:text-sm uppercase tracking-[0.3em] text-lightGold/80 mb-8">
+                    With the heavenly blessings of our parents &amp; elders
+                </p>
+            </div>
+
+            <!-- Bride & Groom Names Showcase -->
+            <div id="couple" class="reveal active relative max-w-4xl mx-auto my-4 px-6 py-12 sm:px-14 sm:py-16 rounded-3xl royal-card">
+                
+                <!-- Decorative Corner Mandalas -->
+                <i class="fa-solid fa-dharmachakra text-royalGold/30 text-3xl absolute top-4 left-4 animate-mandala"></i>
+                <i class="fa-solid fa-dharmachakra text-royalGold/30 text-3xl absolute top-4 right-4 animate-mandala-reverse"></i>
+                <i class="fa-solid fa-dharmachakra text-royalGold/30 text-3xl absolute bottom-4 left-4 animate-mandala-reverse"></i>
+                <i class="fa-solid fa-dharmachakra text-royalGold/30 text-3xl absolute bottom-4 right-4 animate-mandala"></i>
+
+                <p class="font-cinzel text-xs sm:text-sm tracking-[0.35em] text-lightGold uppercase mb-6">
+                    Together with their families invite you to the wedding of
+                </p>
+
+                <!-- Animated Names Layout -->
+                <div class="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-10 my-4">
+                    <div class="text-center">
+                        <h1 class="font-script text-6xl sm:text-7xl md:text-8xl gold-foil-text py-2 drop-shadow-lg">
+                            Priya
+                        </h1>
+                        <p class="font-playfair text-xs sm:text-sm text-lightGold/80 tracking-widest uppercase mt-1">
+                            Daughter of Mrs. Sunita &amp; Mr. Rajesh Sharma
+                        </p>
+                    </div>
+
+                    <!-- Golden Ornate Ampersand -->
+                    <div class="my-2 md:my-0 flex flex-col items-center">
+                        <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-full border border-royalGold/60 bg-deepCrimson/80 flex items-center justify-center shadow-inner">
+                            <span class="font-cinzel text-2xl sm:text-3xl text-royalGold font-bold">&amp;</span>
+                        </div>
+                    </div>
+
+                    <div class="text-center">
+                        <h1 class="font-script text-6xl sm:text-7xl md:text-8xl gold-foil-text py-2 drop-shadow-lg">
+                            Rahul
+                        </h1>
+                        <p class="font-playfair text-xs sm:text-sm text-lightGold/80 tracking-widest uppercase mt-1">
+                            Son of Mrs. Meera &amp; Mr. Vikram Verma
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Or
